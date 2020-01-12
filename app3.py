@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import press3
+# GIT VERSION
 # import RPi.GPIO as GPIO
 
 #GPIO.setmode(GPIO.BCM) #set up GPIO
