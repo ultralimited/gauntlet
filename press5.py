@@ -1,6 +1,6 @@
 #!/usr/bin/python
-# import RPi.GPIO as GPIO
-import GPIOmock as GPIO
+import RPi.GPIO as GPIO
+#import GPIOmock as GPIO
 import time
 from time import sleep
 
