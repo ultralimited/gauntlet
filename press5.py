@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 import GPIOmock as GPIO
 import time
 from time import sleep
@@ -65,8 +65,6 @@ def prePrint():
     GPIO.output(23, GPIO.LOW)
     print("RESET index ")
 
-    sleep(0.25)
-
 
 def flood(heads):
     if heads[0]:
@@ -100,8 +98,6 @@ def flood(heads):
     if heads[7]:
         print("FLOOD 8")
         GPIO.output(24, GPIO.HIGH)
-
-    sleep(0.25)
 
 
 def doPrint(heads):
@@ -137,20 +133,63 @@ def doPrint(heads):
         print("8 go")
         GPIO.output(24, GPIO.LOW)
 
-    sleep(0.5)
-
 
 def rotate():
     GPIO.output(23, GPIO.HIGH)
-    print("RESET READY - rotate")
+    print("RESET READY")
     time.sleep(1)
 
 
-def dwell(sleepTime):
-    print("DWELL")
-    time.sleep(sleepTime)
+def printOnce(heads, double, hoodyEnabled):
+    print("PRINT")
+
+    prePrint()
+    doPrint(heads)
+    time.sleep(3)
+
+    if(isAHeadActive(double) and isAHeadActive(heads)):
+        print("PRINT DOUBLE")
+        flood(double)
+
+        if(hoodyEnabled):
+            print("PRINT HOOD 2ND")
+            tableDown()
+            time.sleep(0.5)
+            tableUp()
+            time.sleep(0.5)
+
+        doPrint(double)
+        time.sleep(3)
+
+    rotate()
+    tableDown()
+    flood(heads)
 
 
-def sleep(sleepTime):
-    print("SLEEP")
-    time.sleep(sleepTime)
+def printAuto(heads, double, loop, dwell, hoodyEnabled):
+    print("AUTO")
+    for x in range(loop):
+        cycle = x + 1
+        print("cycle " + str(cycle) + " out of " + str(loop))
+
+        printOnce(heads, double, hoodyEnabled)
+        time.sleep(1.5)
+
+        print("DWELLING FOR: " + str(dwell) + " SECONDS")
+        time.sleep(dwell)
+
+
+def printClean(heads, double):
+    print("CLEAN")
+
+    prePrint()
+    doPrint(heads)
+    time.sleep(3)
+
+
+def isAHeadActive(heads):
+    for x in heads:
+        if(x):
+            return True
+
+    return False

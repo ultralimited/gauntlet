@@ -119,14 +119,9 @@ const button = {
 const press = {
   tableUp: "tableUp",
   tableDown: "tableDown",
-  prePrint: "prePrint",
-  flood: "flood",
-  rotate: "rotate",
-  print: "print",
-  secondFlood: 'secondFlood',
-  secondHit: "secondHit",
-  dwell: "dwell",
-  sleep: "sleep"
+  printOnce: "printOnce",
+  printAuto: "printAuto",
+  printClean: "printClean"
 }
 
 function saveInputSelections(){
@@ -276,7 +271,7 @@ function clearIntervals(){
 function tableUp(){
   disableButton(button.up);
 
-  post(press.tableUp).done(()=> {
+  postWithData(press.tableUp).done(()=> {
     console.log("TABLE UP");
     enableButton(button.up);
   })
@@ -285,30 +280,24 @@ function tableUp(){
 function tableDown(){
   disableButton(button.down);
 
-  post(press.tableDown).done(()=> {
+  postWithData(press.tableDown).done(()=> {
     console.log("TABLE DOWN");
     enableButton(button.down);
   })
 }
 var serverRequest; 
 
-function post (action, sleepTime = 0){
-  serverRequest = $.post("/callfunction", {
-    action: action,
-    heads: "",
-    double: "",
-    sleepTime: sleepTime
-  });
-
-  return serverRequest;
-}
-
 function postWithData (action){
+  disableAllButtons();
+  saveInputSelections();
+
   serverRequest = $.post("/callfunction", {
     action: action, 
     heads:  getHeads(), 
     double: getDouble(),
-    dwellTime: document.getElementById('dwell-time').value
+    loopCount: document.getElementById("print-loop").value,
+    dwellTime: document.getElementById('dwell-time').value,
+    hoodyEnabled: document.getElementById('hoody').checked
   });
 
   return serverRequest;
@@ -332,90 +321,22 @@ function getDouble(){
   return heads;
 }
 
-async function printOnce(isLooping = false){
-  const printingHoody = document.getElementById('hoody').checked;
-  
-  disableAllButtons();
-  saveInputSelections();
+async function printOnce(){
+  await postWithData(press.printOnce);
 
-  console.log("prePrint")
-  await post(press.prePrint);
-
-  console.log("print")
-  await postWithData(press.print);
-  await post(press.sleep, 3);
-
-  if(getDouble().includes("1")){
-   
-    console.log("flood 2nd")
-        
-    await postWithData(press.secondFlood);
-    
-    if(printingHoody){
-     await postWithData(press.tableDown);
-     await post(press.sleep, 2);
-     await postWithData(press.tableUp);
-     await post(press.sleep, 2);
-    }
-    
-    console.log("secondHit")
-    await postWithData(press.secondHit);
-  }
-
-  console.log("rotate")
-  await post(press.rotate);
-
-  console.log("flood")
-  await postWithData(press.flood);
-  
-  console.log("tableDown")
-  await post(press.tableDown);
-
-  if(!isLooping){
-    enableAllButtons();
-  }
+  enableAllButtons();
 }
 
 async function printAuto(){
-  saveInputSelections();
-
-  var printLoop = document.getElementById("print-loop").value;
-
-  for(var i = 0 ; i < printLoop; i++){
-    console.log("print loop ", i)
-    await printOnce(true);
-
-    await postWithData(press.dwell);
-  }
+  await postWithData(press.printAuto);
 
   enableAllButtons();
 }
 
 async function clean(isLooping = false){
-  disableAllButtons();
-  saveInputSelections();
+  await postWithData(press.printClean);
 
-  console.log("prePrint")
-  await post(press.prePrint);
-
-  console.log("print")
-  await postWithData(press.print);
-
-  if(getDouble().includes("1")){
-    console.log("flood 2nd")
-    await postWithData(press.secondFlood);
-
-    console.log("secondHit")
-    await postWithData(press.secondHit);
-  }
- 
   enableAllButtons();
-}
-
-
-function abort(){
-  enableAllButtons();
-  serverRequest.abort();
 }
 
 </script>
@@ -515,8 +436,6 @@ function abort(){
 					<input id="button-print" type="button" class="button buttonG" value="PRINT" onclick="printOnce()"/>
           <input id="button-auto" type="button" class="button buttonG" value="AUTO" onclick="printAuto()"/>
           <input id="button-clean" type="button" class="button buttonR" value="CLEAN" onclick="clean()"/>
-          <input id="button-abort" type="button" class="button buttonR" value="ABORT" onclick="abort()"/>
-
 				</form>
 				</td>
 			</tr>

@@ -13,6 +13,11 @@ def index():
 def callfunction():
     headsData = request.form['heads']
     secondHitData = request.form['double']
+    loopCount = int(request.form['loopCount'])
+    dwellTime = int(request.form['dwellTime'])
+    hoodyEnabled = request.form['hoodyEnabled'] == 'true'
+
+    print(hoodyEnabled)
 
     heads = []
     secondHit = []
@@ -28,22 +33,12 @@ def callfunction():
         press.tableUp()
     elif action == 'tableDown':
         press.tableDown()
-    elif action == 'prePrint':
-        press.prePrint()
-    elif action == 'flood':
-        press.flood(heads)
-    elif action == 'rotate':
-        press.rotate()
-    elif action == 'print':
-        press.doPrint(heads)
-    elif action == 'secondFlood':
-        press.flood(secondHit)
-    elif action == 'secondHit':
-        press.doPrint(secondHit)
-    elif action == 'dwell':
-        press.dwell(int(request.form['dwellTime']))
-    elif action == 'sleep':
-        press.sleep(int(request.form['sleepTime']))
+    elif action == 'printOnce':
+        press.printOnce(heads, secondHit, hoodyEnabled)
+    elif action == "printAuto":
+        press.printAuto(heads, secondHit, loopCount, dwellTime, hoodyEnabled)
+    elif action == 'printClean':
+        press.printClean(heads, secondHit)
     return index()
 
 
