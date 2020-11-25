@@ -145,7 +145,7 @@ def printOnce(heads, double, hoodyEnabled):
 
     prePrint()
     doPrint(heads)
-    time.sleep(3)
+    time.sleep(4.5)
 
     if(isAHeadActive(double) and isAHeadActive(heads)):
         print("PRINT DOUBLE")
@@ -154,14 +154,17 @@ def printOnce(heads, double, hoodyEnabled):
         if(hoodyEnabled):
             print("PRINT HOOD 2ND")
             tableDown()
-            time.sleep(0.5)
+            time.sleep(1.5)
             tableUp()
-            time.sleep(0.5)
 
+        time.sleep(2.5)
         doPrint(double)
-        time.sleep(3)
+        time.sleep(4.5)
 
     rotate()
+
+    time.sleep(0.25)
+
     tableDown()
     flood(heads)
 
@@ -180,10 +183,8 @@ def printAuto(heads, double, loop, dwell, hoodyEnabled):
 
 def printClean(heads, double):
     print("CLEAN")
-
     prePrint()
     doPrint(heads)
-    time.sleep(3)
 
 
 def isAHeadActive(heads):
