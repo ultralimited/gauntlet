@@ -1,0 +1,153 @@
+#!/usr/bin/python
+import RPi.GPIO as GPIO
+# import GPIOmock as GPIO
+import time
+from time import sleep
+
+GPIO.setmode(GPIO.BCM)
+
+# init list with pin numbers
+
+pinList = [2, 3, 4, 5, 6, 12, 13, 16, 17, 22, 23, 24, 25, 26, 27]
+
+# loop through pins and set mode and state to 'low'
+
+for i in pinList:
+    GPIO.setup(i, GPIO.OUT)
+    GPIO.output(i, GPIO.HIGH)
+
+# time to sleep between operations in the main loop
+
+SleepTimeL = 2
+
+# main loop
+
+
+def tableUp():
+    GPIO.output(27, GPIO.LOW)
+    print("Table Up")
+    sleep(0.25)
+
+
+def tableDown():
+    GPIO.output(27, GPIO.HIGH)
+    print("Table Down")
+    sleep(0.25)
+
+
+def prePrint():
+    time.sleep(0.25)
+
+    GPIO.output(4, GPIO.LOW)
+    print("fork on")
+
+    time.sleep(0.25)
+
+    GPIO.output(17, GPIO.LOW)
+    print("index on")
+
+    time.sleep(3)
+
+    GPIO.output(27, GPIO.LOW)
+    print("table up")
+
+    time.sleep(1)
+
+    GPIO.output(4, GPIO.HIGH)
+    print("fork OFF")
+    time.sleep(0.15)
+
+    GPIO.output(17, GPIO.HIGH)
+    print("index OFF")
+
+    time.sleep(0.15)
+
+    GPIO.output(23, GPIO.LOW)
+    print("RESET index ")
+
+    time.sleep(1)
+
+
+def flood(heads):
+    if heads[0]:
+        print("FLOOD 1")
+        GPIO.output(26, GPIO.HIGH)
+
+    if heads[1]:
+        print("FLOOD 2")
+        GPIO.output(16, GPIO.HIGH)
+
+    if heads[2]:
+        print("FLOOD 3")
+        GPIO.output(13, GPIO.HIGH)
+
+    if heads[3]:
+        print("FLOOD 4")
+        GPIO.output(6, GPIO.HIGH)
+
+    if heads[4]:
+        print("FLOOD 5")
+        GPIO.output(12, GPIO.HIGH)
+
+    if heads[5]:
+        print("FLOOD 6")
+        GPIO.output(5, GPIO.HIGH)
+
+    if heads[6]:
+        print("FLOOD 7")
+        GPIO.output(25, GPIO.HIGH)
+
+    if heads[7]:
+        print("FLOOD 8")
+        GPIO.output(24, GPIO.HIGH)
+
+    time.sleep(1)
+
+
+def doPrint(heads):
+    time.sleep(2.5)
+
+    if heads[0]:
+        print("1 go")
+        GPIO.output(26, GPIO.LOW)
+
+    if heads[1]:
+        print("2 go")
+        GPIO.output(16, GPIO.LOW)
+
+    if heads[2]:
+        print("3 go")
+        GPIO.output(13, GPIO.LOW)
+
+    if heads[3]:
+        print("4 go")
+        GPIO.output(6, GPIO.LOW)
+
+    if heads[4]:
+        print("5 go")
+        GPIO.output(12, GPIO.LOW)
+
+    if heads[5]:
+        print("6 go")
+        GPIO.output(5, GPIO.LOW)
+
+    if heads[6]:
+        print("7 go")
+        GPIO.output(25, GPIO.LOW)
+
+    if heads[7]:
+        print("8 go")
+        GPIO.output(24, GPIO.LOW)
+
+    time.sleep(4.5)
+
+
+def rotate():
+    GPIO.output(23, GPIO.HIGH)
+    print("RESET READY - rotate")
+    time.sleep(1)
+
+
+def dwell(sleepTime):
+    print("DWELL")
+    time.sleep(sleepTime)
