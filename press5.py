@@ -173,7 +173,6 @@ def printAuto(heads, double, loop, dwell, hoodyEnabled):
         print("cycle " + str(cycle) + " out of " + str(loop))
 
         printOnce(heads, double, hoodyEnabled)
-        time.sleep(1.5)
 
         print("DWELLING FOR: " + str(dwell) + " SECONDS")
         time.sleep(dwell)
