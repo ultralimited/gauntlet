@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Ultra</title>
+	</head>
+
+<style>
+table ,td, tr {
+		width: 30%;
+}
+
+.button {
+  background-color: rgb(255, 255, 255); 
+  border: none;
+  color: white;
+  padding: 30px 40px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 90px;
+  margin: 30px;
+  border: none;
+  border-radius: 15px;
+  -webkit-appearance: none;
+}
+
+.button:disabled{
+  background-color: #666666
+}
+
+
+.buttonG {background-color: #4CAF50;} /* Green */
+.buttonB {background-color: #008CBA;} /* Blue */
+.buttonR {background-color: #f44336;} /* Red */ 
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+  margin: 10px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(60px);
+  -ms-transform: translateX(60px);
+  transform: translateX(60px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 60px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+input[type=checkbox] {
+    transform: scale(3.0);
+}
+
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+const button = {
+  up: "button-up",
+  down: "button-down",
+  print: "button-print",
+  auto: "button-auto",
+  abort: "button-abort"
+};
+
+const press = {
+  tableUp: "tableUp",
+  tableDown: "tableDown",
+  prePrint: "prePrint",
+  flood: "flood",
+  rotate: "rotate",
+  print: "print",
+  secondFlood: 'secondFlood',
+  secondHit: "secondHit",
+  dwell: "dwell"
+}
+
+function saveInputSelections(){
+  
+    var checkbox1 = document.getElementById('checkbox1');
+    var checkbox2 = document.getElementById('checkbox2');
+    var checkbox3 = document.getElementById('checkbox3');
+    var checkbox4 = document.getElementById('checkbox4');
+    var checkbox5 = document.getElementById('checkbox5');
+    var checkbox6 = document.getElementById('checkbox6');
+    var checkbox7 = document.getElementById('checkbox7');
+    var checkbox8 = document.getElementById('checkbox8');
+
+    var checkbox1a = document.getElementById('checkbox1a');
+    var checkbox2a = document.getElementById('checkbox2a');
+    var checkbox3a = document.getElementById('checkbox3a');
+    var checkbox4a = document.getElementById('checkbox4a');
+    var checkbox5a = document.getElementById('checkbox5a');
+    var checkbox6a = document.getElementById('checkbox6a');
+    var checkbox7a = document.getElementById('checkbox7a');
+    var checkbox8a = document.getElementById('checkbox8a');
+
+    localStorage.setItem('checkbox1', checkbox1.checked);
+    localStorage.setItem('checkbox2', checkbox2.checked);
+    localStorage.setItem('checkbox3', checkbox3.checked);
+    localStorage.setItem('checkbox4', checkbox4.checked);
+    localStorage.setItem('checkbox5', checkbox5.checked);
+    localStorage.setItem('checkbox6', checkbox6.checked);    
+    localStorage.setItem('checkbox7', checkbox7.checked);
+    localStorage.setItem('checkbox8', checkbox8.checked);
+	
+    localStorage.setItem('checkbox1a', checkbox1a.checked);
+    localStorage.setItem('checkbox2a', checkbox2a.checked);
+    localStorage.setItem('checkbox3a', checkbox3a.checked);
+    localStorage.setItem('checkbox4a', checkbox4a.checked);
+    localStorage.setItem('checkbox5a', checkbox5a.checked);
+    localStorage.setItem('checkbox6a', checkbox6a.checked);    
+    localStorage.setItem('checkbox7a', checkbox7a.checked);
+    localStorage.setItem('checkbox8a', checkbox8a.checked);
+	
+    var printLoop = document.getElementById('print-loop').value;
+    localStorage.setItem('print-loop', printLoop);
+    
+    var dwellTime = document.getElementById('dwell-time').value;
+    localStorage.setItem('dwell-time', dwellTime);
+}
+
+function reloadInputSelections(){    
+  var checked1 = JSON.parse(localStorage.getItem('checkbox1'));
+	var checked2 = JSON.parse(localStorage.getItem('checkbox2'));
+	var checked3 = JSON.parse(localStorage.getItem('checkbox3'));
+	var checked4 = JSON.parse(localStorage.getItem('checkbox4'));
+	var checked5 = JSON.parse(localStorage.getItem('checkbox5'));
+	var checked6 = JSON.parse(localStorage.getItem('checkbox6'));
+	var checked7 = JSON.parse(localStorage.getItem('checkbox7'));
+	var checked8 = JSON.parse(localStorage.getItem('checkbox8'));
+
+	var checked1a = JSON.parse(localStorage.getItem('checkbox1a'));
+	var checked2a = JSON.parse(localStorage.getItem('checkbox2a'));
+	var checked3a = JSON.parse(localStorage.getItem('checkbox3a'));
+	var checked4a = JSON.parse(localStorage.getItem('checkbox4a'));
+	var checked5a = JSON.parse(localStorage.getItem('checkbox5a'));
+	var checked6a = JSON.parse(localStorage.getItem('checkbox6a'));
+	var checked7a = JSON.parse(localStorage.getItem('checkbox7a'));
+	var checked8a = JSON.parse(localStorage.getItem('checkbox8a'));
+
+  document.getElementById("checkbox1").checked = checked1;
+  document.getElementById("checkbox2").checked = checked2;
+	document.getElementById("checkbox3").checked = checked3;
+  document.getElementById("checkbox4").checked = checked4;
+  document.getElementById("checkbox5").checked = checked5;
+	document.getElementById("checkbox6").checked = checked6;
+  document.getElementById("checkbox7").checked = checked7;
+  document.getElementById("checkbox8").checked = checked8;
+
+	document.getElementById("checkbox1a").checked = checked1a;
+  document.getElementById("checkbox2a").checked = checked2a;
+	document.getElementById("checkbox3a").checked = checked3a;
+	document.getElementById("checkbox4a").checked = checked4a;
+  document.getElementById("checkbox5a").checked = checked5a;
+	document.getElementById("checkbox6a").checked = checked6a;
+  document.getElementById("checkbox7a").checked = checked7a;
+  document.getElementById("checkbox8a").checked = checked8a;
+	
+	var loop = JSON.parse(localStorage.getItem('print-loop'));
+	document.getElementById("print-loop").value = loop;
+	
+	var dwellTime = JSON.parse(localStorage.getItem('dwell-time'));
+	document.getElementById("dwell-time").value = dwellTime;
+}
+
+function disableButton(id){
+  document.getElementById(id).disabled = true;
+}
+
+function enableButton(id){
+  document.getElementById(id).disabled = false;
+}
+
+function disableAllButtons(){
+  statusBusy();
+  disableButton(button.up);
+  disableButton(button.down);
+  disableButton(button.print);
+  disableButton(button.auto);
+}
+
+function enableAllButtons(){
+  statusReady();
+  enableButton(button.up);
+  enableButton(button.down);
+  enableButton(button.print);
+  enableButton(button.auto);
+}
+
+function statusBusy(){
+  var statusIndicator = document.getElementById("status");
+  statusIndicator.style.background = 'grey';
+  statusIndicator.value = ":|";
+
+  clearIntervals();
+  setInterval(() => {
+    statusIndicator.style.background= statusIndicator.style.background =='red' ? 'grey' :'red';
+  }, 1000);
+}
+
+function statusReady(){
+  document.getElementById("status").style.background='#4CAF50';
+  document.getElementById("status").value=":)";
+  clearIntervals();
+}
+
+function clearIntervals(){
+  // clear all interval
+  var interval_id = setInterval(()=>{}, 9999); 
+
+  for (var i = 0; i <= interval_id; i++)
+    clearInterval(i);
+}
+
+function tableUp(){
+  disableButton(button.up);
+
+  post(press.tableUp).done(()=> {
+    console.log("TABLE UP");
+    enableButton(button.up);
+  })
+}
+
+function tableDown(){
+  disableButton(button.down);
+
+  post(press.tableDown).done(()=> {
+    console.log("TABLE DOWN");
+    enableButton(button.down);
+  })
+}
+var serverRequest; 
+
+function post (action){
+  serverRequest = $.post("/callfunction", {
+    action: action,
+    heads: "",
+    double: "",
+  });
+
+  return serverRequest;
+}
+
+function postWithData (action){
+  serverRequest = $.post("/callfunction", {
+    action: action, 
+    heads:  getHeads(), 
+    double: getDouble(),
+    dwellTime: document.getElementById('dwell-time').value
+  });
+
+  return serverRequest;
+}
+
+function getHeads(){
+  var heads = "";
+  for(var i = 0; i < 8; i++){
+    var checked = document.getElementById(`checkbox${i+1}`).checked;
+    heads += checked ? 1 : 0;
+  }
+  return heads
+}
+
+function getDouble(){
+  var heads = [];
+  for(var i = 0; i < 8; i++){
+    var checked = document.getElementById(`checkbox${i+1}a`).checked;
+    heads += checked ? 1 : 0;
+  }
+  return heads;
+}
+
+async function printOnce(isLooping = false, doFlood = true){
+  disableAllButtons();
+  saveInputSelections();
+
+  console.log("prePrint")
+  await post(press.prePrint);
+
+  console.log("print")
+  await postWithData(press.print);
+
+  if(getDouble().includes("1")){
+    console.log("flood 2nd")
+    await postWithData(press.secondFlood);
+
+    console.log("secondHit")
+    await postWithData(press.secondHit);
+  }
+
+  console.log("rotate")
+  await post(press.rotate);
+
+  console.log("tableDown")
+  await post(press.tableDown);
+
+  if(doFlood){
+    console.log("flood")
+    await postWithData(press.flood);
+  }
+
+  if(!isLooping){
+    enableAllButtons();
+  }
+}
+
+async function printAuto(){
+  saveInputSelections();
+
+  var printLoop = document.getElementById("print-loop").value;
+
+  for(var i = 0 ; i < printLoop; i++){
+    console.log("print loop ", i)
+    var doLastFlood = i < printLoop-1;
+    await printOnce(true, doLastFlood);
+
+    await postWithData(press.dwell);
+  }
+
+  enableAllButtons();
+}
+
+function abort(){
+  enableAllButtons();
+  serverRequest.abort();
+}
+
+</script>
+	<body onload="reloadInputSelections()">
+		<table style="width:100%; max-width: 800px; height:300px;">
+			<tr>
+				<td>
+          <input id="status" type="button" class="button buttonG" value=":)" >
+          </br>
+          <input id="button-up" type="button" class="button buttonB" value="U" onclick="tableUp()" >
+          </br>
+          <input id="button-down" type="button" class="button buttonB" value="D" onclick="tableDown()" >
+          </br>
+				</td>
+				
+				<td>
+				<form id='headsform' action="/400" method="POST">
+				  
+					<label class="switch"> 1
+					<label for="male">Male</label>
+						<input type="checkbox" checked name='H1' id="checkbox1">
+						<span class="slider round">1</span>
+					</label>
+					<label>1
+						<input type="checkbox" checked name='D1' id="checkbox1a">
+					</label>
+
+					<label class="switch"> 2
+						<input type="checkbox" checked name='H2' id="checkbox2">
+						<span class="slider round">2</span>
+					</label>	
+					<label>2
+						<input type="checkbox" checked name='D2' id="checkbox2a">
+					</label>
+
+					<label class="switch"> 3
+						<input type="checkbox" checked name='H3' id="checkbox3">
+						<span class="slider round">3</span>
+					</label>
+					<label>3
+						<input type="checkbox" checked name='D3' id="checkbox3a">
+					</label>
+
+					<label class="switch"> 4
+						<input type="checkbox" checked name='H4' id="checkbox4">
+						<span class="slider round">4</span>
+					</label>
+					<label>4
+						<input type="checkbox" checked name='D4' id="checkbox4a">
+					</label>
+
+					<label class="switch"> 5
+						<input type="checkbox" checked name='H5' id="checkbox5">
+						<span class="slider round">5</span>
+					</label>
+					<label>5
+						<input type="checkbox" checked name='D5' id="checkbox5a">
+					</label>
+
+					<label class="switch"> 6
+						<input type="checkbox" checked name='H6' id="checkbox6">
+						<span class="slider round">6</span>
+					</label>
+					<label>6
+						<input type="checkbox" checked name='D6' id="checkbox6a">
+					</label>
+
+					<label class="switch"> 7
+						<input type="checkbox" checked name='H7' id="checkbox7">
+						<span class="slider round">7</span>
+					</label>	
+					<label>7
+						<input type="checkbox" checked name='D7' id="checkbox7a">
+					</label>
+
+					<label class="switch"> 8
+						<input type="checkbox" checked name='H8' id="checkbox8">
+						<span class="slider round">8</span>
+					</label>
+					<label>8
+						<input type="checkbox" checked name='D8' id="checkbox8a">
+					</label>
+					<br>
+					<br>
+					<label for="L">LOOP:  </label>
+					<input type="number" name="L" id="print-loop" value=1>
+					<br>
+					<br>
+					<label for="DWELL">DWELL: </label>
+					<input type="number" name="DWELL" id="dwell-time" value=1>
+					
+					<input id="button-print" type="button" class="button buttonG" value="PRINT" onclick="printOnce()"/>
+          <input id="button-auto" type="button" class="button buttonG" value="AUTO" onclick="printAuto()"/>
+          <input id="button-abort" type="button" class="button buttonR" value="ABORT" onclick="abort()"/>
+				</form>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
