@@ -40,7 +40,7 @@ def go():
 	print ("index on")
 
   
-	time.sleep(3);
+	time.sleep(2.25);
 
   
 	GPIO.output(27, GPIO.LOW)
@@ -120,7 +120,7 @@ def prePrint():
 	GPIO.output(17, GPIO.LOW)
 	print ("index on")
   
-	time.sleep(3);
+	time.sleep(2.5);
   
 	GPIO.output(27, GPIO.LOW)
 	print ("table up");
