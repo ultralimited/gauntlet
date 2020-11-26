@@ -324,7 +324,7 @@ function getDouble(){
   return heads;
 }
 
-async function printOnce(isLooping = false, doFlood = true){
+async function printOnce(isLooping = false){
   disableAllButtons();
   saveInputSelections();
 
@@ -348,10 +348,8 @@ async function printOnce(isLooping = false, doFlood = true){
   console.log("tableDown")
   await post(press.tableDown);
 
-  if(doFlood){
-    console.log("flood")
-    await postWithData(press.flood);
-  }
+  console.log("flood")
+  await postWithData(press.flood);
 
   if(!isLooping){
     enableAllButtons();
@@ -365,14 +363,35 @@ async function printAuto(){
 
   for(var i = 0 ; i < printLoop; i++){
     console.log("print loop ", i)
-    var doLastFlood = i < printLoop-1;
-    await printOnce(true, doLastFlood);
+    await printOnce(true);
 
     await postWithData(press.dwell);
   }
 
   enableAllButtons();
 }
+
+async function clean(isLooping = false){
+  disableAllButtons();
+  saveInputSelections();
+
+  console.log("prePrint")
+  await post(press.prePrint);
+
+  console.log("print")
+  await postWithData(press.print);
+
+  if(getDouble().includes("1")){
+    console.log("flood 2nd")
+    await postWithData(press.secondFlood);
+
+    console.log("secondHit")
+    await postWithData(press.secondHit);
+  }
+ 
+  enableAllButtons();
+}
+
 
 function abort(){
   enableAllButtons();
@@ -381,7 +400,7 @@ function abort(){
 
 </script>
 	<body onload="reloadInputSelections()">
-		<table style="width:100%; max-width: 800px; height:300px;">
+		<table style="width:100%; max-width: 900px; height:300px;">
 			<tr>
 				<td>
           <input id="status" type="button" class="button buttonG" value=":)" >
@@ -470,7 +489,9 @@ function abort(){
 					
 					<input id="button-print" type="button" class="button buttonG" value="PRINT" onclick="printOnce()"/>
           <input id="button-auto" type="button" class="button buttonG" value="AUTO" onclick="printAuto()"/>
+          <input id="button-abort" type="button" class="button buttonR" value="CLEAN" onclick="clean()"/>
           <input id="button-abort" type="button" class="button buttonR" value="ABORT" onclick="abort()"/>
+
 				</form>
 				</td>
 			</tr>
