@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, make_response
 import press3
-# GIT VERSION
 # import RPi.GPIO as GPIO
 
 #GPIO.setmode(GPIO.BCM) #set up GPIO
 
 app = Flask(__name__) #set up flask server
+
 
 #when the root IP is selected, return index.html page
 @app.route('/')
