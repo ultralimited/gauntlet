@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import RPi.GPIO as GPIO
-# import GPIOmock as GPIO
+#import GPIOmock as GPIO
 import time
 from time import sleep
 
@@ -34,7 +34,6 @@ def tableDown():
     print("Table Down")
     sleep(0.25)
 
-
 def prePrint():
     time.sleep(0.25)
 
@@ -46,7 +45,7 @@ def prePrint():
     GPIO.output(17, GPIO.LOW)
     print("index on")
 
-    time.sleep(3)
+    time.sleep(2.5)
 
     GPIO.output(27, GPIO.LOW)
     print("table up")
@@ -65,8 +64,7 @@ def prePrint():
     GPIO.output(23, GPIO.LOW)
     print("RESET index ")
 
-    time.sleep(1)
-
+    sleep(0.25)
 
 def flood(heads):
     if heads[0]:
@@ -101,12 +99,9 @@ def flood(heads):
         print("FLOOD 8")
         GPIO.output(24, GPIO.HIGH)
 
-    time.sleep(1)
-
+    sleep(0.25)
 
 def doPrint(heads):
-    time.sleep(2.5)
-
     if heads[0]:
         print("1 go")
         GPIO.output(26, GPIO.LOW)
@@ -138,9 +133,8 @@ def doPrint(heads):
     if heads[7]:
         print("8 go")
         GPIO.output(24, GPIO.LOW)
-
-    time.sleep(4.5)
-
+                    
+    sleep(0.5)
 
 def rotate():
     GPIO.output(23, GPIO.HIGH)
@@ -150,4 +144,8 @@ def rotate():
 
 def dwell(sleepTime):
     print("DWELL")
+    time.sleep(sleepTime)
+    
+def sleep(sleepTime):
+    print("SLEEP")
     time.sleep(sleepTime)

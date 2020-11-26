@@ -41,6 +41,8 @@ def callfunction():
         press.doPrint(secondHit)
     elif action == 'dwell':
         press.dwell(int(request.form['dwellTime']))
+    elif action == 'sleep':
+        press.sleep(int(request.form['sleepTime']))
     return index()
 
 

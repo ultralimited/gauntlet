@@ -125,7 +125,8 @@ const press = {
   print: "print",
   secondFlood: 'secondFlood',
   secondHit: "secondHit",
-  dwell: "dwell"
+  dwell: "dwell",
+  sleep: "sleep"
 }
 
 function saveInputSelections(){
@@ -147,6 +148,9 @@ function saveInputSelections(){
     var checkbox6a = document.getElementById('checkbox6a');
     var checkbox7a = document.getElementById('checkbox7a');
     var checkbox8a = document.getElementById('checkbox8a');
+
+    var hoody = document.getElementById('hoody');
+    localStorage.setItem('hoody', hoody.checked);
 
     localStorage.setItem('checkbox1', checkbox1.checked);
     localStorage.setItem('checkbox2', checkbox2.checked);
@@ -191,6 +195,9 @@ function reloadInputSelections(){
 	var checked6a = JSON.parse(localStorage.getItem('checkbox6a'));
 	var checked7a = JSON.parse(localStorage.getItem('checkbox7a'));
 	var checked8a = JSON.parse(localStorage.getItem('checkbox8a'));
+
+	var hoody = JSON.parse(localStorage.getItem('hoody'));
+  document.getElementById("hoody").checked = hoody;
 
   document.getElementById("checkbox1").checked = checked1;
   document.getElementById("checkbox2").checked = checked2;
@@ -285,11 +292,12 @@ function tableDown(){
 }
 var serverRequest; 
 
-function post (action){
+function post (action, sleepTime = 0){
   serverRequest = $.post("/callfunction", {
     action: action,
     heads: "",
     double: "",
+    sleepTime: sleepTime
   });
 
   return serverRequest;
@@ -325,6 +333,8 @@ function getDouble(){
 }
 
 async function printOnce(isLooping = false){
+  const printingHoody = document.getElementById('hoody').checked;
+  
   disableAllButtons();
   saveInputSelections();
 
@@ -333,11 +343,21 @@ async function printOnce(isLooping = false){
 
   console.log("print")
   await postWithData(press.print);
+  await post(press.sleep, 3);
 
   if(getDouble().includes("1")){
+   
     console.log("flood 2nd")
+        
     await postWithData(press.secondFlood);
-
+    
+    if(printingHoody){
+     await postWithData(press.tableDown);
+     await post(press.sleep, 2);
+     await postWithData(press.tableUp);
+     await post(press.sleep, 2);
+    }
+    
     console.log("secondHit")
     await postWithData(press.secondHit);
   }
@@ -345,11 +365,11 @@ async function printOnce(isLooping = false){
   console.log("rotate")
   await post(press.rotate);
 
-  console.log("tableDown")
-  await post(press.tableDown);
-
   console.log("flood")
   await postWithData(press.flood);
+  
+  console.log("tableDown")
+  await post(press.tableDown);
 
   if(!isLooping){
     enableAllButtons();
@@ -402,6 +422,11 @@ function abort(){
 	<body onload="reloadInputSelections()">
 		<table style="width:100%; max-width: 900px; height:300px;">
 			<tr>
+
+        <label class="switch"> 
+						<input type="checkbox" checked name='H' id="hoody">
+						<span class="slider round">H</span>
+        </label>
 				<td>
           <input id="status" type="button" class="button buttonG" value=":)" >
           </br>
@@ -489,7 +514,7 @@ function abort(){
 					
 					<input id="button-print" type="button" class="button buttonG" value="PRINT" onclick="printOnce()"/>
           <input id="button-auto" type="button" class="button buttonG" value="AUTO" onclick="printAuto()"/>
-          <input id="button-abort" type="button" class="button buttonR" value="CLEAN" onclick="clean()"/>
+          <input id="button-clean" type="button" class="button buttonR" value="CLEAN" onclick="clean()"/>
           <input id="button-abort" type="button" class="button buttonR" value="ABORT" onclick="abort()"/>
 
 				</form>
